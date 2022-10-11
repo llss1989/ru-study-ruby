@@ -8,15 +8,15 @@ module Exercise
       # film["genres"], film["year"], film["access_level"], film["country"]
       def rating(array)
         kinopoisk_ratings_with_countries = array.each_with_object([]) do |film, acc|
-          acc << film['rating_kinopoisk'].to_f if rating?(film['rating_kinopoisk']) && made_in_more_two_countries?(film)
+          acc << film['rating_kinopoisk'].to_f if rating_positive?(film['rating_kinopoisk']) && made_in_more_two_countries?(film)
         end
-        kinopoisk_ratings_with_countries.reduce(0.0) do |acc, rating|
-          acc + rating
-        end / kinopoisk_ratings_with_countries.length
+        kinopoisk_ratings_with_countries.reduce(0.0, :+) / kinopoisk_ratings_with_countries.length
       end
 
-      def rating?(rating)
-        !rating.nil? && rating.to_d != 0.0.to_d
+      def rating_positive?(rating)
+        return false if rating.nil?
+
+        rating.to_d > 0.0.to_d
       end
 
       def made_in_more_two_countries?(film)
@@ -27,7 +27,7 @@ module Exercise
 
       def chars_count(films, threshold)
         films.reduce(0) do |acc, film|
-          acc += chars_count_of_film(film['name'], 'и') if rating?(film['rating_kinopoisk']) && film['rating_kinopoisk'].to_f >= threshold.to_f
+          acc += chars_count_of_film(film['name'], 'и') if rating_positive?(film['rating_kinopoisk']) && film['rating_kinopoisk'].to_f >= threshold.to_f
           acc
         end
       end
