@@ -7,17 +7,13 @@ module Exercise
       # Написать свою функцию my_each
 
       def my_each(&block)
-        if block_given?
-          return [] if empty?
+        return self if empty?
 
-          first, *rest = self
-          yield first
-          arr_without_first = MyArray.new(rest)
-          arr_without_first.my_each(&block)
-          self
-        else
-          to_enum :my_each
-        end
+        first, *rest = self
+        yield first
+        arr_without_first = MyArray.new(rest)
+        arr_without_first.my_each(&block)
+        self
       end
 
       # Написать свою функцию my_map
@@ -38,9 +34,9 @@ module Exercise
       end
 
       # Написать свою функцию my_reduce
-      def my_reduce(*args, &block)
-        current_acc =  args[0].nil? ? self[0] : args[0]
-        starting_array = args[0].nil? ? self[1..] : self
+      def my_reduce(arg = nil, &block)
+        current_acc =  arg.nil? ? self[0] : arg
+        starting_array = arg.nil? ? self[1..] : self
         iter = lambda { |array, acc, &innerblock|
           return acc if array.empty?
 
