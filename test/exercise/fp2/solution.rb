@@ -36,8 +36,6 @@ module Exercise
       # Написать свою функцию my_reduce
       def my_reduce(arg = nil, &block)
         current_acc =  arg.nil? ? self[0] : arg
-        puts  current_acc.class
-        # puts current_acc
         starting_array = arg.nil? ? self[1..] : self
         iter = lambda { |array, acc, &innerblock|
           return acc if array.empty?
