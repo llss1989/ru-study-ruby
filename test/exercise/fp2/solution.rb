@@ -33,18 +33,14 @@ module Exercise
                     end)
       end
 
-      # Написать свою функцию my_reduce
       def my_reduce(arg = nil, &block)
-        current_acc =  arg.nil? ? self[0] : arg
-        starting_array = arg.nil? ? self[1..] : self
-        iter = lambda { |array, acc, &innerblock|
-          return acc if array.empty?
+        standardised_arr = arg.nil? ? self : [arg] + self
+        return standardised_arr[0] if standardised_arr.empty? || standardised_arr.length == 1
 
-          first, *rest = array
-          acc = yield(acc, first)
-          return iter.call(rest, acc, &innerblock)
-        }
-        iter.call(starting_array, current_acc, &block)
+        acc, element, *rest = standardised_arr
+        first = yield(acc, element)
+        new_arr = rest.unshift(first)
+        MyArray.new(new_arr).my_reduce(&block)
       end
     end
   end
