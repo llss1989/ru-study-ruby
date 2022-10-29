@@ -34,13 +34,11 @@ module Exercise
       end
 
       def my_reduce(arg = nil, &block)
-        standardised_arr = arg.nil? ? self : [arg] + self
-        return standardised_arr[0] if standardised_arr.empty? || standardised_arr.length == 1
-
-        acc, element, *rest = standardised_arr
-        first = yield(acc, element)
-        new_arr = rest.unshift(first)
-        MyArray.new(new_arr).my_reduce(&block)
+        if length == 1
+          return arg.nil? ? self[0] : yield(arg, self[0])
+        end
+        return arg.nil? ? MyArray.new(self[2..-1]).my_reduce(yield(self[0], self[1]),&block) : 
+          MyArray.new(self[1..-1]).my_reduce(yield(arg, self[0]),&block)
       end
     end
   end
