@@ -19,9 +19,7 @@ module Exercise
       # Написать свою функцию my_map
       def my_map
         if block_given?
-          MyArray.new(my_reduce([]) { |acc, current_el|
-          acc.push(yield current_el) 
-        })
+          MyArray.new(my_reduce([]) { |acc, current_el| acc.push(yield current_el) })
         else
           to_enum :my_map
         end
@@ -34,6 +32,7 @@ module Exercise
                       acc
                     end)
       end
+
 
       def my_reduce(acc = nil, &block)
         return acc if empty?
