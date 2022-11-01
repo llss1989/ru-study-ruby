@@ -19,7 +19,9 @@ module Exercise
       # Написать свою функцию my_map
       def my_map
         if block_given?
-          MyArray.new(my_reduce([]) { |acc, current_el| acc.push(yield current_el) })
+          MyArray.new(my_reduce([]) { |acc, current_el|
+          acc.push(yield current_el) 
+        })
         else
           to_enum :my_map
         end
@@ -33,13 +35,11 @@ module Exercise
                     end)
       end
 
-      def my_reduce(arg = nil, &block)
-        if length == 1
-          return arg.nil? ? self[0] : yield(arg, self[0])
-        end
-        return arg.nil? ? MyArray.new(self[2..-1]).my_reduce(yield(self[0], self[1]),&block) : 
-          MyArray.new(self[1..-1]).my_reduce(yield(arg, self[0]),&block)
-      end
+      def my_reduce(acc = nil, &block)
+        return acc if empty?
+        new_acc = acc.nil? ? first : block.call(acc, first)
+        MyArray.new(self[1..]).my_reduce(new_acc, &block)
+      end  
     end
   end
 end
